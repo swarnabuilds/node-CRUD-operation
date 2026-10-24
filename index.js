@@ -21,11 +21,21 @@ export async function connectToMongoDB() {
     console.dir(err);
   } 
 }
-await connectToMongoDB();
+
+//get data from database
+const connectedClient = await connectToMongoDB();
+const db = connectedClient.db('simpleCrudDb');
+const users = db.collection("users");
 
 
 app.get('/', (req, res) => {
   res.send('simple crud running ');
+});
+
+app.get('/users', async (req, res) => {
+    const cursor = users.find({});
+    const allUsers = await cursor.toArray();
+  res.send(allUsers);
 });
 
 app.listen(port, () => {
