@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
   res.send('simple crud running ');
 });
 
+//data read
 app.get('/users', async (req, res) => {
     const cursor = users.find({});
     const allUsers = await cursor.toArray();
@@ -46,11 +47,19 @@ app.get('/users/:id', async(req, res) => {
     res.send(result)
 })
 
-
+//data create
 app.post('/users', async(req, res) => {
     const newUser = req.body;
     console.log(newUser)
     const result = await users.insertOne(newUser);
+    res.send(result)
+})
+
+//data delete
+app.delete('/users/:id', async(req, res) => {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)}
+    const result = await users.deleteOne(query)
     res.send(result)
 })
 
